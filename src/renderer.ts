@@ -28,5 +28,6 @@
 
 import 'bootstrap';
 import './scss/app.scss';
+import '@fortawesome/fontawesome-free/js/all';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');

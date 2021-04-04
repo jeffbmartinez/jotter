@@ -50,6 +50,7 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "@popperjs/core": "^2.9.1",
     "bootstrap": "^5.0.0-beta3",
     "electron-squirrel-startup": "^1.0.0"
