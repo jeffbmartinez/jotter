@@ -16,18 +16,7 @@ rules.push(
     use: [
       { loader: 'style-loader' },
       { loader: 'css-loader' },
-      {
-        loader: 'postcss-loader',
-        options: {
-          postcssOptions: {
-            plugins: function () {
-              return [
-                require('autoprefixer'),
-              ];
-            },
-          },
-        },
-      },
+      { loader: 'postcss-loader' },
       { loader: 'sass-loader' },
     ],
   },
