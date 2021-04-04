@@ -7,8 +7,6 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit();
 }
 
-console.log("👋 This message is being logged by 'index.ts', included via webpack");
-
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
