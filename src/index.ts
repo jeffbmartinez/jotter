@@ -1,6 +1,19 @@
-import { app, BrowserWindow, globalShortcut } from 'electron';
+import * as path from 'path';
+
+import {
+  app,
+  BrowserWindow,
+  globalShortcut,
+  Menu,
+  Tray,
+} from 'electron';
+
+import penIcon from './images/pen.png';
+
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
+
+let tray: any = null;
 
 // Options for shortcut keys: https://www.electronjs.org/docs/api/accelerator
 const globalShortcutKey = 'CommandOrControl+Control+Shift+N';
@@ -26,6 +39,9 @@ const createJotterWindow = (): void => {
   jotterWindow = new BrowserWindow({
     height: 150,
     width: 600,
+    frame: false,
+    resizable: false,
+    alwaysOnTop: true,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     }
@@ -37,9 +53,6 @@ const createJotterWindow = (): void => {
     visibleOnFullScreen: true,
   });
 
-  // See available "on top" options: https://www.electronjs.org/docs/api/browser-window#winsetalwaysontopflag-level-relativelevel
-  jotterWindow.setAlwaysOnTop(true, 'pop-up-menu');
-
   // and load the index.html of the app.
   jotterWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
@@ -49,6 +62,9 @@ const createJotterWindow = (): void => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+
+// app.whenReady().then(() => { // I'm keeping this here for debugging. This promise version gives more error information
+// on certain occasions, like when I was feeding `new Tray(...)` a bad icon file path.
 app.on('ready', () => {
   const registrationResult = globalShortcut.register(globalShortcutKey, () => {
     console.log(`\n${globalShortcutKey} was pressed`);
@@ -62,6 +78,18 @@ app.on('ready', () => {
   // Check whether a shortcut is registered.
   const successfulRegistration = globalShortcut.isRegistered(globalShortcutKey);
   console.log(successfulRegistration ? "Ready to go" : "Registration problem occurred");
+
+  tray = new Tray(path.join(__dirname, penIcon));
+  tray.setToolTip('Jotter');
+  tray.setIgnoreDoubleClickEvents(true);
+  tray.on('click', (e) => {
+    console.log('Tray icon was clicked');
+  });
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Item1', type: 'radio' },
+    { label: 'Quit', type: 'radio' },
+  ]);
+  tray.setContextMenu(contextMenu);
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

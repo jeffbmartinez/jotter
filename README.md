@@ -26,3 +26,4 @@ If the window doesn't appear on it's own, point your browser to http://localhost
 ## Thank You List
 
 * [theolazian](https://github.com/theolazian)'s [Electron+Webpack+Bootstrap+FontAwesome+JQuery tutorial](https://dev.to/theola/electron-app-with-webpack-bootstrap-fontawesome-and-jquery-a-complete-guide-54k2) helped me get the initial structure going.
+* [icongeek26](https://www.flaticon.com/authors/icongeek26) for the pencil icon that appears in the tray.
