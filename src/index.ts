@@ -99,11 +99,13 @@ const registerTrayIcon = (): void => {
 
   tray.on('right-click', () => {
     const menu = Menu.buildFromTemplate([
-      {
-        label: 'Settings',
-        click: () => { console.log('Settings menu item was clicked'); },
-      },
-      { type: 'separator' },
+      // Eventually add a settings menu, to customize global shortcut
+      // and storage location, etc.
+      // {
+      //   label: 'Settings',
+      //   click: () => { console.log('Settings menu item was clicked'); },
+      // },
+      // { type: 'separator' },
       { role: 'quit' },
     ]);
 
