@@ -25,11 +25,8 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 
 let jotterWindow: BrowserWindow = null;
 const createJotterWindow = (): void => {
-  // Only want one window open at a time
-  // so cancel operation if window is already open
   if (jotterWindow) {
-    console.log("Showing previously-existing Jotter window");
-    jotterWindow.show();
+    console.log("Error: Already have an active Jotter window. Probably a bug somewhere ... Aborting to prevent further issues");
     return;
   }
 
@@ -42,6 +39,7 @@ const createJotterWindow = (): void => {
     frame: false,
     resizable: false,
     alwaysOnTop: true,
+    show: false,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     }
@@ -59,16 +57,25 @@ const createJotterWindow = (): void => {
   // jotterWindow.webContents.openDevTools();
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+const toggleJotterWindow = (): void => {
+  if (!jotterWindow) {
+    // This happens for at least one use case at the moment.
+    // When the jotter window is closed via CMD+W
+    console.log("Error: The jotter window should already exist. You have a bug ... Creating a new one to prevent more errors");
+    createJotterWindow();
+  }
 
-// app.whenReady().then(() => { // I'm keeping this here for debugging. This promise version gives more error information
-// on certain occasions, like when I was feeding `new Tray(...)` a bad icon file path.
-app.on('ready', () => {
+  if (jotterWindow.isVisible()) {
+    jotterWindow.hide();
+  } else {
+    jotterWindow.show();
+  }
+};
+
+const registerGlobalKeyboardShortcut = (): void => {
   const registrationResult = globalShortcut.register(globalShortcutKey, () => {
     console.log(`\n${globalShortcutKey} was pressed`);
-    createJotterWindow();
+    toggleJotterWindow();
   });
 
   if (!registrationResult) {
@@ -77,19 +84,43 @@ app.on('ready', () => {
 
   // Check whether a shortcut is registered.
   const successfulRegistration = globalShortcut.isRegistered(globalShortcutKey);
-  console.log(successfulRegistration ? "Ready to go" : "Registration problem occurred");
+  console.log(successfulRegistration ? "Global shortcut is enabled" : "Global shortcut registration failed");
+};
 
+const registerTrayIcon = (): void => {
   tray = new Tray(path.join(__dirname, penIcon));
-  tray.setToolTip('Jotter');
+
+  tray.setToolTip('Jotter (CMD+CTRL+Shift+N)');
   tray.setIgnoreDoubleClickEvents(true);
-  tray.on('click', (e) => {
-    console.log('Tray icon was clicked');
+
+  tray.on('click', () => {
+    toggleJotterWindow();
   });
-  const contextMenu = Menu.buildFromTemplate([
-    { label: 'Item1', type: 'radio' },
-    { label: 'Quit', type: 'radio' },
-  ]);
-  tray.setContextMenu(contextMenu);
+
+  tray.on('right-click', () => {
+    const menu = Menu.buildFromTemplate([
+      {
+        label: 'Settings',
+        click: () => { console.log('Settings menu item was clicked'); },
+      },
+      { type: 'separator' },
+      { role: 'quit' },
+    ]);
+
+    menu.popup();
+  });
+};
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+
+// app.whenReady().then(() => { // I'm keeping this here for debugging. This promise version gives more error information
+// on certain occasions, like when I was feeding `new Tray(...)` a bad icon file path.
+app.on('ready', () => {
+  createJotterWindow();
+  registerGlobalKeyboardShortcut();
+  registerTrayIcon();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -109,7 +140,7 @@ app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
-    createJotterWindow();
+    jotterWindow.show();
   }
 });
 
