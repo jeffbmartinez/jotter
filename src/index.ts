@@ -119,6 +119,11 @@ const registerTrayIcon = (): void => {
   });
 };
 
+const disableApplicationMenu = (): void => {
+  const emptyMenu = new Menu();
+  Menu.setApplicationMenu(emptyMenu);
+};
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -126,6 +131,7 @@ const registerTrayIcon = (): void => {
 // app.whenReady().then(() => { // I'm keeping this here for debugging. This promise version gives more error information
 // on certain occasions, like when I was feeding `new Tray(...)` a bad icon file path.
 app.on('ready', () => {
+  disableApplicationMenu();
   createJotterWindow();
   registerGlobalKeyboardShortcut();
   registerTrayIcon();
