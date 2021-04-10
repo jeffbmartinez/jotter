@@ -98,6 +98,12 @@ const registerTrayIcon = (): void => {
   });
 
   tray.on('right-click', () => {
+    // Building a Menu without a window to associate it with fails.
+    if (!jotterWindow) {
+      console.log('ERROR: jotterWindow must exist for Menu.popup to work');
+      return;
+    }
+
     const menu = Menu.buildFromTemplate([
       // Eventually add a settings menu, to customize global shortcut
       // and storage location, etc.
