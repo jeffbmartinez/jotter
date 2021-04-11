@@ -43,8 +43,7 @@ const handleKeydown = (e: KeyboardEvent): void => {
 };
 
 const handleEscKeydown = (): void => {
-  console.log("Esc key was pressed");
-  console.log("TODO: Hide the jotter window");
+  window.electronApi.ipcRendererInvokeKeydownEscape();
 };
 
 window.addEventListener('keydown', handleKeydown, true);

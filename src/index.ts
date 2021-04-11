@@ -4,6 +4,7 @@ import {
   app,
   BrowserWindow,
   globalShortcut,
+  ipcMain,
   Menu,
   Tray,
 } from 'electron';
@@ -41,6 +42,7 @@ const createJotterWindow = (): void => {
     alwaysOnTop: true,
     show: false,
     webPreferences: {
+      contextIsolation: true,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     }
   });
@@ -72,9 +74,16 @@ const toggleJotterWindow = (): void => {
   }
 };
 
+const registerIpcHandlers = (): void => {
+  ipcMain.handle('keydown-escape', () => {
+    if (jotterWindow) {
+      jotterWindow.hide();
+    }
+  });
+};
+
 const registerGlobalKeyboardShortcut = (): void => {
   const registrationResult = globalShortcut.register(globalShortcutKey, () => {
-    console.log(`\n${globalShortcutKey} was pressed`);
     toggleJotterWindow();
   });
 
@@ -133,6 +142,7 @@ const disableApplicationMenu = (): void => {
 app.on('ready', () => {
   disableApplicationMenu();
   createJotterWindow();
+  registerIpcHandlers();
   registerGlobalKeyboardShortcut();
   registerTrayIcon();
 });
