@@ -33,3 +33,18 @@ import './scss/app.scss';
 import './ts/index.ts';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
+
+const handleKeydown = (e: KeyboardEvent): void => {
+  switch (e.key) {
+    case 'Escape':
+      handleEscKeydown();
+      break;
+  }
+};
+
+const handleEscKeydown = (): void => {
+  console.log("Esc key was pressed");
+  console.log("TODO: Hide the jotter window");
+};
+
+window.addEventListener('keydown', handleKeydown, true);
