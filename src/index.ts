@@ -35,7 +35,7 @@ const createJotterWindow = (): void => {
 
   // Create the browser window.
   jotterWindow = new BrowserWindow({
-    height: 150,
+    height: 160,
     width: 600,
     frame: false,
     resizable: false,
