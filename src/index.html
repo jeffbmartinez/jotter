@@ -33,20 +33,37 @@
 
     subjectInput.focus();
 
-    submitButton.addEventListener('click', () => {
+    const handleKeydown = (e) => {
+      switch (e.key) {
+        case 'Escape':
+          window.electronApi.hideJotterWindow();
+          break;
+        case 'Enter':
+          if (e.metaKey) { // e.metaKey is true if command key is pressed (cmd+enter detection)
+            submitNote();
+          }
+          break;
+      }
+    };
+
+    const submitNote = () => {
       console.log(`subject: ${subjectInput.value}`);
       console.log(`details: ${detailsInput.value}`);
 
       detailsInput.value = '';
-      subjectInput.select(); // Leave the subject intact but highlighted for the next note.
+      subjectInput.select(); // Leave the subject intact but highlighted for potential reuse in the next note.
 
       window.electronApi.hideJotterWindow();
-    });
+    };
 
-    clearButton.addEventListener('click', () => {
+    const clearNote = () => {
       detailsInput.value = '';
       subjectInput.select();
-    });
+    };
+
+    window.addEventListener('keydown', handleKeydown, true);
+    submitButton.addEventListener('click', submitNote);
+    clearButton.addEventListener('click', clearNote);
   </script>
 </body>
 
