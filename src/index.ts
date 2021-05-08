@@ -27,6 +27,16 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit();
 }
 
+// electron app doesn't restore focus to other apps by default.
+// The work around described here (https://github.com/electron/electron/issues/2640) is in
+// use to fix this behavior.
+const hideWindowAndLoseFocus = (targetWindow: BrowserWindow): void => {
+  if (targetWindow) {
+    targetWindow.hide();
+    Menu.sendActionToFirstResponder('hide:');
+  }
+};
+
 let jotterWindow: BrowserWindow = null;
 const createJotterWindow = (): void => {
   if (jotterWindow) {
@@ -73,7 +83,7 @@ const toggleJotterWindow = (): void => {
   }
 
   if (jotterWindow.isVisible()) {
-    jotterWindow.hide();
+    hideWindowAndLoseFocus(jotterWindow);
   } else {
     jotterWindow.show();
   }
@@ -82,9 +92,11 @@ const toggleJotterWindow = (): void => {
 const registerIpcHandlers = (): void => {
   ipcMain.handle('hide-jotter-window', () => {
     if (jotterWindow) {
-      // See https://github.com/jeffbmartinez/jotter/issues/14 for why
-      // this setTimeout is here.
-      setTimeout(() => jotterWindow.hide(), 10);
+      // See https://github.com/jeffbmartinez/jotter/issues/14
+      // for why this setTimeout is here.
+      setTimeout(() => {
+        hideWindowAndLoseFocus(jotterWindow);
+      }, 10);
     }
   });
 };
