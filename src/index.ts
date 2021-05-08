@@ -14,6 +14,9 @@ import penIcon from './images/pen.png';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
+// For development purpose only. This should be removed from final version.
+const DEVELOPMENT_MODE = true;
+
 let tray: Tray = null;
 
 // Options for shortcut keys: https://www.electronjs.org/docs/api/accelerator
@@ -35,10 +38,10 @@ const createJotterWindow = (): void => {
 
   // Create the browser window.
   jotterWindow = new BrowserWindow({
-    height: 160,
-    width: 600,
+    height: DEVELOPMENT_MODE ? 800 : 160,
+    width: DEVELOPMENT_MODE ? 1200 : 600,
     frame: false,
-    resizable: false,
+    resizable: DEVELOPMENT_MODE ? true : false,
     alwaysOnTop: true,
     show: false,
     webPreferences: {
@@ -56,7 +59,9 @@ const createJotterWindow = (): void => {
   // and load the index.html of the app.
   jotterWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  // jotterWindow.webContents.openDevTools();
+  if (DEVELOPMENT_MODE) {
+    jotterWindow.webContents.openDevTools();
+  }
 };
 
 const toggleJotterWindow = (): void => {
@@ -140,7 +145,7 @@ const disableApplicationMenu = (): void => {
 // app.whenReady().then(() => { // I'm keeping this here for debugging. This promise version gives more error information
 // on certain occasions, like when I was feeding `new Tray(...)` a bad icon file path.
 app.on('ready', () => {
-  disableApplicationMenu();
+  if (!DEVELOPMENT_MODE) { disableApplicationMenu(); }
   createJotterWindow();
   registerIpcHandlers();
   registerGlobalKeyboardShortcut();
