@@ -82,7 +82,9 @@ const toggleJotterWindow = (): void => {
 const registerIpcHandlers = (): void => {
   ipcMain.handle('hide-jotter-window', () => {
     if (jotterWindow) {
-      jotterWindow.hide();
+      // See https://github.com/jeffbmartinez/jotter/issues/14 for why
+      // this setTimeout is here.
+      setTimeout(() => jotterWindow.hide(), 10);
     }
   });
 };
