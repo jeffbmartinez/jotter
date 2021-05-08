@@ -143,7 +143,7 @@ const registerTrayIcon = (): void => {
       { role: 'quit' },
     ]);
 
-    menu.popup();
+    tray.popUpContextMenu(menu);
   });
 };
 
