@@ -43,6 +43,7 @@ const detailsInput = (<HTMLInputElement>document.getElementById('noteDetailsInpu
 subjectInput.focus();
 
 const handleKeydown = (e: KeyboardEvent): void => {
+  // Possible e.key values: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
   switch (e.key) {
     case 'Escape':
       window.electronApi.hideJotterWindow();
