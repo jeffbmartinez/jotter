@@ -38,17 +38,13 @@
       detailsInput.value = '';
       subjectInput.select(); // Leave the subject intact but highlighted for the next note.
 
-      hideJotterWindow();
+      window.electronApi.hideJotterWindow();
     });
 
     clearButton.addEventListener('click', () => {
       detailsInput.value = '';
       subjectInput.select();
     });
-
-    const hideJotterWindow = () => {
-      // Send message via IPC to main process to hide the window.
-    };
   </script>
 </body>
 

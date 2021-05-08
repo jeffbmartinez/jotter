@@ -6,13 +6,13 @@ import {
 declare global {
   interface Window {
     electronApi: {
-      ipcRendererInvokeKeydownEscape: () => void,
+      hideJotterWindow: () => void,
     };
   }
 }
 
 contextBridge.exposeInMainWorld('electronApi', {
-  ipcRendererInvokeKeydownEscape: () => {
-    ipcRenderer.invoke('keydown-escape');
+  hideJotterWindow: () => {
+    ipcRenderer.invoke('hide-jotter-window');
   }
 });

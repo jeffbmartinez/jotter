@@ -80,7 +80,7 @@ const toggleJotterWindow = (): void => {
 };
 
 const registerIpcHandlers = (): void => {
-  ipcMain.handle('keydown-escape', () => {
+  ipcMain.handle('hide-jotter-window', () => {
     if (jotterWindow) {
       jotterWindow.hide();
     }

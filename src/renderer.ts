@@ -43,7 +43,7 @@ const handleKeydown = (e: KeyboardEvent): void => {
 };
 
 const handleEscKeydown = (): void => {
-  window.electronApi.ipcRendererInvokeKeydownEscape();
+  window.electronApi.hideJotterWindow();
 };
 
 window.addEventListener('keydown', handleKeydown, true);
