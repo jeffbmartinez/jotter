@@ -31,6 +31,8 @@
     const subjectInput = document.getElementById('noteSubjectInput');
     const detailsInput = document.getElementById('noteDetailsInput');
 
+    subjectInput.focus();
+
     submitButton.addEventListener('click', () => {
       console.log(`subject: ${subjectInput.value}`);
       console.log(`details: ${detailsInput.value}`);
