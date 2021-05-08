@@ -23,48 +23,6 @@
       </div>
     </div>
   </div>
-
-  <script>
-    const submitButton = document.getElementById('noteSubmitButton');
-    const clearButton = document.getElementById('noteClearButton');
-
-    const subjectInput = document.getElementById('noteSubjectInput');
-    const detailsInput = document.getElementById('noteDetailsInput');
-
-    subjectInput.focus();
-
-    const handleKeydown = (e) => {
-      switch (e.key) {
-        case 'Escape':
-          window.electronApi.hideJotterWindow();
-          break;
-        case 'Enter':
-          if (e.metaKey) { // e.metaKey is true if command key is pressed (cmd+enter detection)
-            submitNote();
-          }
-          break;
-      }
-    };
-
-    const submitNote = () => {
-      console.log(`subject: ${subjectInput.value}`);
-      console.log(`details: ${detailsInput.value}`);
-
-      detailsInput.value = '';
-      subjectInput.select(); // Leave the subject intact but highlighted for potential reuse in the next note.
-
-      window.electronApi.hideJotterWindow();
-    };
-
-    const clearNote = () => {
-      detailsInput.value = '';
-      subjectInput.select();
-    };
-
-    window.addEventListener('keydown', handleKeydown, true);
-    submitButton.addEventListener('click', submitNote);
-    clearButton.addEventListener('click', clearNote);
-  </script>
 </body>
 
 </html>

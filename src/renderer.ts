@@ -33,3 +33,44 @@ import './scss/app.scss';
 import './ts/index.ts';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
+
+const submitButton = document.getElementById('noteSubmitButton');
+const clearButton = document.getElementById('noteClearButton');
+
+const subjectInput = (<HTMLInputElement>document.getElementById('noteSubjectInput'));
+const detailsInput = (<HTMLInputElement>document.getElementById('noteDetailsInput'));
+
+subjectInput.focus();
+
+const handleKeydown = (e: KeyboardEvent): void => {
+  switch (e.key) {
+    case 'Escape':
+      window.electronApi.hideJotterWindow();
+      break;
+    case 'Enter':
+      if (e.metaKey) { // e.metaKey is true if command key is pressed (cmd+enter detection)
+        submitNote();
+      }
+      break;
+  }
+};
+
+const clearNote = () => {
+  detailsInput.value = '';
+  subjectInput.select(); // Leave the subject intact but highlighted for potential reuse in the next note.
+};
+
+const submitNote = () => {
+  console.log(`subject: ${subjectInput.value}`);
+  console.log(`details: ${detailsInput.value}`);
+
+  clearNote();
+
+  // TODO: saveNote(); Send note details to main process via IPC for storage
+
+  window.electronApi.hideJotterWindow();
+};
+
+window.addEventListener('keydown', handleKeydown, true);
+submitButton.addEventListener('click', submitNote);
+clearButton.addEventListener('click', clearNote);
