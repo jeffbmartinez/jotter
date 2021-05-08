@@ -23,6 +23,33 @@
       </div>
     </div>
   </div>
+
+  <script>
+    const submitButton = document.getElementById('noteSubmitButton');
+    const clearButton = document.getElementById('noteClearButton');
+
+    const subjectInput = document.getElementById('noteSubjectInput');
+    const detailsInput = document.getElementById('noteDetailsInput');
+
+    submitButton.addEventListener('click', () => {
+      console.log(`subject: ${subjectInput.value}`);
+      console.log(`details: ${detailsInput.value}`);
+
+      detailsInput.value = '';
+      subjectInput.select(); // Leave the subject intact but highlighted for the next note.
+
+      hideJotterWindow();
+    });
+
+    clearButton.addEventListener('click', () => {
+      detailsInput.value = '';
+      subjectInput.select();
+    });
+
+    const hideJotterWindow = () => {
+      // Send message via IPC to main process to hide the window.
+    };
+  </script>
 </body>
 
 </html>
