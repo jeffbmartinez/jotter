@@ -4,18 +4,15 @@ DB Structure
   "notes": [
     {
       "subject": "subject 1",
-      "details": "details",
-      "etc": "..."
+      "details": "details"
     },
     {
       "subject": "subject 2",
-      "details": "details",
-      "etc": "..."
+      "details": "details"
     },
     {
       "subject": "subject 1",
-      "details": "more details",
-      "etc": "..."
+      "details": "more details"
     }
   ]
 }
