@@ -4,11 +4,14 @@ import {
 } from 'electron';
 
 import Note from './ts/note';
-import Storage from './ts/storage';
+import storage from './ts/storage';
+
+import autosuggester from './ts/autosuggester';
 
 declare global {
   interface Window {
     electronApi: {
+      getSuggestions: (searchString: string) => [string],
       saveNote: (note: Note) => void,
       hideJotterWindow: () => void,
     };
@@ -16,14 +19,18 @@ declare global {
 }
 
 contextBridge.exposeInMainWorld('electronApi', {
+  getSuggestions: (searchString: string) => {
+    return autosuggester.suggestFor(searchString);
+  },
+
   saveNote: (note: Note) => {
-    Storage.db
+    storage.db
       .get("notes")
       .push({
         subject: note.subject,
         details: note.details,
       });
-    Storage.db.save();
+    storage.db.save();
   },
 
   hideJotterWindow: () => {

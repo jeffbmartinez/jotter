@@ -26,7 +26,7 @@ import StormDB from 'stormdb';
 const dbStoreFolder = './data';
 const dbStoreFilename = 'db.stormdb';
 
-const Storage = new class {
+const storage = new class {
   readonly db;
 
   constructor(dbStoreFilename: string) {
@@ -43,4 +43,4 @@ const Storage = new class {
   }
 }(dbStoreFilename);
 
-export default Storage;
+export default storage;

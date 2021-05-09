@@ -72,6 +72,13 @@ const submitNote = () => {
   window.electronApi.hideJotterWindow();
 };
 
+const onSubjectInput = () => {
+  const suggestions = window.electronApi.getSuggestions(subjectInput.value);
+  console.log(suggestions);
+  // todo: Incorporate suggestions into UI (https://github.com/jeffbmartinez/jotter/issues/17)
+};
+
 window.addEventListener('keydown', handleKeydown, true);
 submitButton.addEventListener('click', submitNote);
 clearButton.addEventListener('click', clearNote);
+subjectInput.addEventListener('input', onSubjectInput);
