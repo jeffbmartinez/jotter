@@ -62,9 +62,6 @@ const clearNote = () => {
 };
 
 const submitNote = () => {
-  console.log(`subject: ${subjectInput.value}`);
-  console.log(`details: ${detailsInput.value}`);
-
   window.electronApi.saveNote({
     subject: subjectInput.value,
     details: detailsInput.value,
