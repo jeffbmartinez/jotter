@@ -65,9 +65,12 @@ const submitNote = () => {
   console.log(`subject: ${subjectInput.value}`);
   console.log(`details: ${detailsInput.value}`);
 
-  clearNote();
+  window.electronApi.saveNote({
+    subject: subjectInput.value,
+    details: detailsInput.value,
+  });
 
-  // TODO: saveNote(); Send note details to main process via IPC for storage
+  clearNote();
 
   window.electronApi.hideJotterWindow();
 };
