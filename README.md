@@ -23,7 +23,7 @@ Then in the `lldb` console:
 
 If the window doesn't appear on it's own, point your browser to http://localhost:8315 and select the link for the Jotter app.
 
-## Making a distributable package
+## Making a Distributable Package
 
 `npm run make`
 
