@@ -6,6 +6,9 @@ import Note from './note';
 const autosuggester = new class {
   fuse: Fuse<Note>;
 
+  // Note: The "new Fuse(...)" call here is using a reference to the storage.db.get("notes") result
+  // so called fuse.add(...) actually adds a new note to the storage as well.
+  // It's coupled in a non-intuitive way.
   constructor() {
     const notes: [Note] = storage.db.get("notes").value();
     console.log('notes:', notes);
@@ -16,8 +19,16 @@ const autosuggester = new class {
 
   suggestFor(searchString: string) {
     console.log(`searching for: ${searchString}`);
-    const results = this.fuse.search(searchString).map(a => a.item).map(b => b.subject);
+    const results = this.fuse
+      .search(searchString, { limit: 5 })
+      .map(result => result.item.subject);
+
     return results;
+  }
+
+  // Note: This adds a new item to the storage.db as well. See note at the constructor.
+  add(item: Note) {
+    this.fuse.add(item);
   }
 }();
 

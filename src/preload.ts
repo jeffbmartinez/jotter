@@ -24,12 +24,11 @@ contextBridge.exposeInMainWorld('electronApi', {
   },
 
   saveNote: (note: Note) => {
-    storage.db
-      .get("notes")
-      .push({
-        subject: note.subject,
-        details: note.details,
-      });
+    // Note: autosuggestor's constructor pulls in a reference to storage.db.get("notes") and uses
+    // it to populate its index. For that reason, autosuggester.add(note) takes care of adding it
+    // to the storage.db as well. But storage.db.save() still needs to be called to persist the new
+    // data.
+    autosuggester.add(note);
     storage.db.save();
   },
 
